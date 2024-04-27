@@ -77,7 +77,17 @@ function drawBars(start, end) {
 
 	for (let i = 0; i < len_of_arr; i++) {
 
-		
+		//bar banane ke liye fillRect function ka use kiya hai
+        //fillRect function ke 4 parameter hai 
+        //1) x-coordinate
+        //2) y-coordinate
+        //3) width
+        //4) height
+        //x-coordinate and y-coordinate is used to set the position of the rectangle
+        //width and height is used to set the width and height of the rectangle
+        //fillRect function is used to fill the rectangle with color
+        //fillStyle is used to set the color of the rectangle
+        //shadowOffsetX is used to set the horizontal distance of the shadow from the shape
 		ctrl.fillStyle = "black"
 		ctrl.shadowOffsetX = 2
 		ctrl.shadowColor = "chocolate";
@@ -124,7 +134,7 @@ const mergeSort = async (start, end) => {
 	}
 }
 
-
+//canvasElements function is used to create canvas element and set its width and height
 function canvasElements() {
 	canvas = document.getElementById("Canvas")
 	canvas.width = canvas.height = 1000
