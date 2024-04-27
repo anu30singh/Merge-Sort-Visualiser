@@ -1,8 +1,8 @@
-// Canvas variables
+// Canvas variables - canvas element is created and its width and height is set to 1000
+//canvas element is used for creating graphics, on the fly, via JavaScript.
+
 var canvas, canvaswidth, canvasheight, ctrl;
 
-// Call canvasElements() to store height width
-// in above canvas variables
 canvasElements();
 
 // 3 array are declared
@@ -16,7 +16,7 @@ var arr = [], itmd = [], visited = []
 
 var len_of_arr = 40;
 
-
+//kahi se bhi random number generate karke array me push kar raha hai
 for (var i = 0; i < len_of_arr; i++) {
 	arr.push(Math.round(Math.random() * 250) )
 }
