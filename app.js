@@ -68,7 +68,7 @@ function mergeArray(start, end) {
 	}
 }
 
-
+//sundar bars banane ke liye drawBars function banaya hai
 function drawBars(start, end) {
 
 	
