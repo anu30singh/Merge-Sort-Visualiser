@@ -1,124 +1,20 @@
 // Canvas variables - canvas element is created and its width and height is set to 1000
-//canvas element is used for creating graphics, on the fly, via JavaScript.
+// Canvas element is used for creating graphics, on the fly, via JavaScript.
 
-var canvas, canvaswidth, canvasheight, ctrl;
+const canvas = document.getElementById("Canvas")
+canvas.width = 1000
+canvas.height = 500
+const ctrl = canvas.getContext("2d")
 
-canvasElements();
+// Populating the arrays
+const length = 40;
+let original = [], intermediate = [], visited = [];
 
-// 3 array are declared
-
-//1) arr is for storing array element 
-//2) itmd for storing intermediate values
-//3) visited is for element which has been sorted
-var arr = [], itmd = [], visited = []
-
-
-
-var len_of_arr = 40;
-
-//kahi se bhi random number generate karke array me push kar raha hai
-for (var i = 0; i < len_of_arr; i++) {
-	arr.push(Math.round(Math.random() * 250) )
-}
-
-
-for (var i = 0; i < len_of_arr; i++) {
-	itmd.push(0)
+for (let i = 0; i < length; i++) {
+	original.push(Math.round(Math.random() * 250))
+	intermediate.push(0)
 	visited.push(0)
 }
-
-
-function mergeArray(start, end) {
-	let mid = parseInt((start + end) >> 1);
-	let start1 = start, start2 = mid + 1
-	let end1 = mid, end2 = end
-	
-	
-	let index = start
-
-	while (start1 <= end1 && start2 <= end2) {
-		if (arr[start1] <= arr[start2]) {
-			itmd[index] = arr[start1]
-			index = index + 1
-			start1 = start1 + 1;
-		}
-		else if(arr[start1] > arr[start2]) {
-			itmd[index] = arr[start2]
-			index = index + 1
-			start2 = start2 + 1;
-		}
-	}
-
-	while (start1 <= end1) {
-		itmd[index] = arr[start1]
-		index = index + 1
-		start1 = start1 + 1;
-	}
-
-	while (start2 <= end2) {
-		itmd[index] = arr[start2]
-		index = index + 1
-		start2 = start2 + 1;
-	}
-
-	index = start
-	while (index <= end) {
-		arr[index] = itmd[index];
-		index++;
-	}
-}
-
-//sundar bars banane ke liye drawBars function banaya hai
-function drawBars(start, end) {
-
-	
-	ctrl.clearRect(0, 0, 1000, 1500)
-
-
-	for (let i = 0; i < len_of_arr; i++) {
-
-		//bar banane ke liye fillRect function ka use kiya hai
-        //fillRect function ke 4 parameter hai 
-        //1) x-coordinate
-        //2) y-coordinate
-        //3) width
-        //4) height
-        //x-coordinate and y-coordinate is used to set the position of the rectangle
-        //width and height is used to set the width and height of the rectangle
-        //fillRect function is used to fill the rectangle with color
-        //fillStyle is used to set the color of the rectangle
-        //shadowOffsetX is used to set the horizontal distance of the shadow from the shape
-		ctrl.fillStyle = "black"
-		ctrl.shadowOffsetX = 2
-		ctrl.shadowColor = "chocolate";
-		ctrl.shadowBlur = 3;
-		ctrl.shadowOffsetY =5;
-		
-		
-		
-		ctrl.fillRect(25 * i, 300 - arr[i], 20, arr[i])
-		
-		if (visited[i]) {
-			ctrl.fillStyle = "#006d13"
-			ctrl.fillRect(25 * i, 300 - arr[i], 20, arr[i])
-			ctrl.shadowOffsetX = 2
-		}
-	}
-
-	for (let i = start; i <= end; i++) {
-		ctrl.fillStyle = "orange"
-		ctrl.fillRect(25 * i, 300 - arr[i], 18, arr[i])
-		ctrl.fillStyle = "#cdff6c"
-		ctrl.fillRect(25 * i,300, 18, arr[i])
-		visited[i] = 1
-	}
-}
-
-
-function timeout(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 
 // Merge Sorting
 const mergeSort = async (start, end) => {
@@ -128,28 +24,73 @@ const mergeSort = async (start, end) => {
 		await mergeSort(mid + 1, end)
 		await mergeArray(start, end)
 		await drawBars(start, end)
-
-		
-		await timeout(800)
+		await timeout(600)
 	}
 }
+const timeout = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+function mergeArray(start, end) {
 
-//canvasElements function is used to create canvas element and set its width and height
-function canvasElements() {
-	canvas = document.getElementById("Canvas")
-	canvas.width = canvas.height = 1000
-	canvaswidth = canvas.width
-	canvasheight = canvas.height
-	ctrl = canvas.getContext("2d")
+    // Declarations
+    let mid = parseInt((start + end) >> 1);
+    let start1 = start, start2 = mid + 1
+    let end1 = mid, end2 = end
+    let index = start
+
+    // Comparison
+    while (start1 <= end1 && start2 <= end2) {
+        if (original [start1] <= original [start2]) intermediate[index++] = original [start1++]
+        if (original [start1] > original [start2]) intermediate[index++] = original [start2++]
+    }
+
+    // Filling up remaining
+    while (start1 <= end1) intermediate[index++] = original [start1++]
+    while (start2 <= end2) intermediate[index++] = original [start2++]
+
+    // Copying to Original
+    index = start
+    while (index <= end) original [index] = intermediate[index++]
+
 }
 
+// Using fillReact us used to make great bars
+function drawBars(start, end) {
 
+    ctrl.clearRect(0, 0, 1000, 1500)
+    for (let i = 0; i < length; i++) {
+
+        ctrl.fillStyle = "black"
+        ctrl.shadowOffsetX = 2
+        ctrl.shadowColor = "chocolate";
+        ctrl.shadowBlur = 3;
+        ctrl.shadowOffsetY = 5;
+
+        ctrl.fillRect(25 * i, 300 - original [i], 20, original [i])
+
+        if (visited[i]) {
+            ctrl.fillStyle = "#006d13"
+            ctrl.fillRect(25 * i, 300 - original [i], 20, original [i])
+            ctrl.shadowOffsetX = 2
+        }
+    }
+
+    for (let i = start; i <= end; i++) {
+        ctrl.fillStyle = "orange"
+        ctrl.fillRect(25 * i, 300 - original [i], 18, original [i])
+        ctrl.fillStyle = "#cdff6c"
+        ctrl.fillRect(25 * i, 300, 18, original [i])
+        visited[i] = 1
+    }
+}
+
+// Running the Code
 const performer = async () => {
-	await mergeSort(0, len_of_arr - 1)
+	await mergeSort(0, length - 1)
 	await drawBars()
-
-	
-	const title1_changer = document.querySelector(".title1")
-	title1_changer.innerText = "Array is completely sorted"
 }
-performer()
+performer().then(r => {
+	const titleChanger = document.querySelector(".title1")
+	titleChanger.innerText = "Array is completely sorted"
+})
+
+
+
