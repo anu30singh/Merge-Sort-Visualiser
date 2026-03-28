@@ -1,96 +1,96 @@
-// Canvas variables - canvas element is created and its width and height is set to 1000
-// Canvas element is used for creating graphics, on the fly, via JavaScript.
+class MergeSortVisualizer {
+  constructor(canvasId, size = 40) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas.getContext("2d");
 
-const canvas = document.getElementById("Canvas")
-canvas.width = 1000
-canvas.height = 500
-const ctrl = canvas.getContext("2d")
+    this.canvas.width = 1000;
+    this.canvas.height = 500;
 
-// Populating the arrays
-const length = 40;
-let original = [], intermediate = [], visited = [];
+    this.size = size;
+    this.array = this.generateArray();
+    this.temp = new Array(size).fill(0);
+    this.visited = new Array(size).fill(false);
 
-for (let i = 0; i < length; i++) {
-	original.push(Math.round(Math.random() * 250))
-	intermediate.push(0)
-	visited.push(0)
-}
+    this.delay = 200;
+  }
 
-// Merge Sorting
-const mergeSort = async (start, end) => {
-	if (start < end) {
-		let mid = parseInt((start + end) >> 1)
-		await mergeSort(start, mid)
-		await mergeSort(mid + 1, end)
-		await mergeArray(start, end)
-		await drawBars(start, end)
-		await timeout(600)
-	}
-}
-const timeout = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-function mergeArray(start, end) {
+  generateArray() {
+    return Array.from({ length: this.size }, () =>
+      Math.floor(Math.random() * 250)
+    );
+  }
 
-    // Declarations
-    let mid = parseInt((start + end) >> 1);
-    let start1 = start, start2 = mid + 1
-    let end1 = mid, end2 = end
-    let index = start
+  sleep(ms) {
+    return new Promise((res) => setTimeout(res, ms));
+  }
 
-    // Comparison
-    while (start1 <= end1 && start2 <= end2) {
-        if (original [start1] <= original [start2]) intermediate[index++] = original [start1++]
-        if (original [start1] > original [start2]) intermediate[index++] = original [start2++]
-    }
+  draw(activeRange = []) {
+    const { ctx, array, visited } = this;
 
-    // Filling up remaining
-    while (start1 <= end1) intermediate[index++] = original [start1++]
-    while (start2 <= end2) intermediate[index++] = original [start2++]
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // Copying to Original
-    index = start
-    while (index <= end) original [index] = intermediate[index++]
+    array.forEach((value, i) => {
+      let color = "black";
 
-}
+      if (visited[i]) color = "#006d13";
+      if (activeRange.includes(i)) color = "orange";
 
-// Using fillReact us used to make great bars
-function drawBars(start, end) {
+      ctx.fillStyle = color;
+      ctx.fillRect(25 * i, 300 - value, 20, value);
+    });
+  }
 
-    ctrl.clearRect(0, 0, 1000, 1500)
-    for (let i = 0; i < length; i++) {
+  async mergeSort(start, end) {
+    if (start >= end) return;
 
-        ctrl.fillStyle = "black"
-        ctrl.shadowOffsetX = 2
-        ctrl.shadowColor = "chocolate";
-        ctrl.shadowBlur = 3;
-        ctrl.shadowOffsetY = 5;
+    const mid = Math.floor((start + end) / 2);
 
-        ctrl.fillRect(25 * i, 300 - original [i], 20, original [i])
+    await this.mergeSort(start, mid);
+    await this.mergeSort(mid + 1, end);
 
-        if (visited[i]) {
-            ctrl.fillStyle = "#006d13"
-            ctrl.fillRect(25 * i, 300 - original [i], 20, original [i])
-            ctrl.shadowOffsetX = 2
-        }
-    }
+    await this.merge(start, mid, end);
 
     for (let i = start; i <= end; i++) {
-        ctrl.fillStyle = "orange"
-        ctrl.fillRect(25 * i, 300 - original [i], 18, original [i])
-        ctrl.fillStyle = "#cdff6c"
-        ctrl.fillRect(25 * i, 300, 18, original [i])
-        visited[i] = 1
+      this.visited[i] = true;
     }
+
+    this.draw(this.range(start, end));
+    await this.sleep(this.delay);
+  }
+
+  async merge(start, mid, end) {
+    let i = start;
+    let j = mid + 1;
+    let k = start;
+
+    while (i <= mid && j <= end) {
+      if (this.array[i] <= this.array[j]) {
+        this.temp[k++] = this.array[i++];
+      } else {
+        this.temp[k++] = this.array[j++];
+      }
+    }
+
+    while (i <= mid) this.temp[k++] = this.array[i++];
+    while (j <= end) this.temp[k++] = this.array[j++];
+
+    for (let x = start; x <= end; x++) {
+      this.array[x] = this.temp[x];
+    }
+  }
+
+  range(start, end) {
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
+  async start() {
+    await this.mergeSort(0, this.size - 1);
+    this.draw();
+    document.querySelector(".title1").innerText =
+      "Array is completely sorted";
+  }
 }
 
-// Running the Code
-const performer = async () => {
-	await mergeSort(0, length - 1)
-	await drawBars()
-}
-performer().then(r => {
-	const titleChanger = document.querySelector(".title1")
-	titleChanger.innerText = "Array is completely sorted"
-})
-
-
-
+// Run it
+const visualizer = new MergeSortVisualizer("Canvas", 40);
+visualizer.start();
