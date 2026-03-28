@@ -1,23 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, 
-	initial-scale=1.0"> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Merge Sort Visualizer</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #a78bfa;
+    }
+
+    h2 {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #111827;
+      color: #e5e7eb;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #6366f1;
+      color: white;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #4f46e5;
+    }
+
+    input[type="range"] {
+      cursor: pointer;
+    }
+
+    .speed-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    canvas {
+      background: #020617;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      margin-top: 10px;
+      max-width: 100%;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+  </style>
 </head>
 
 <body>
-	<h1 class="title" style = "color: purple; font:lighter; ">
-		Merge Sort Visualizer using JS</h1>
 
-	<h2 class="title1" style = "background: black; 
-	color: white; font: italic;">Array is not sorted 
-	</h2>
+  <h1>⚡ Merge Sort Visualizer</h1>
+  <h2 class="title1">Array is not sorted</h2>
 
-	<canvas id="Canvas"></canvas>
-	
-	<script src="app.js"></script>
+  <div class="controls">
+    <button id="startBtn">Start</button>
+    <button id="resetBtn">Reset</button>
+
+    <div>
+      <span class="speed-label">Speed:</span>
+      <input type="range" id="speed" min="50" max="1000" value="200" />
+    </div>
+  </div>
+
+  <canvas id="Canvas" width="1000" height="500"></canvas>
+
+  <footer>Built with ❤️ using Vanilla JS</footer>
+
+  <script src="app.js"></script>
+
+  <script>
+    
+    const visualizer = new MergeSortVisualizer("Canvas", 40);
+
+    document.getElementById("startBtn").onclick = () => {
+      visualizer.start();
+    };
+
+    document.getElementById("resetBtn").onclick = () => {
+      location.reload();
+    };
+
+    document.getElementById("speed").oninput = (e) => {
+      visualizer.delay = e.target.value;
+    };
+  </script>
+
 </body>
-
 </html>
