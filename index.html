@@ -80,16 +80,6 @@
   <h1></h1> Merge Sort Visualizer</h1>
   <h2 class="title1">Array is not sorted</h2>
 
-  <div class="controls">
-    <button id="startBtn">Start</button>
-    <button id="resetBtn">Reset</button>
-
-    <div>
-      <span class="speed-label">Speed:</span>
-      <input type="range" id="speed" min="50" max="1000" value="200" />
-    </div>
-  </div>
-
   <canvas id="Canvas" width="1000" height="500"></canvas>
 
   <footer>Built with ❤️ using Vanilla JS</footer>
@@ -100,17 +90,6 @@
     
     const visualizer = new MergeSortVisualizer("Canvas", 40);
 
-    document.getElementById("startBtn").onclick = () => {
-      visualizer.start();
-    };
-
-    document.getElementById("resetBtn").onclick = () => {
-      location.reload();
-    };
-
-    document.getElementById("speed").oninput = (e) => {
-      visualizer.delay = e.target.value;
-    };
   </script>
 
 </body>
